@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Devkairos</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .navbar-inverse {
+            background-color: #4E90A4;
+            border-color:#83E4B5;
+        }
+        .white {
+            color: #fff;
+        }
+        .navbar-inverse .navbar-brand {
+            color: #fff;
+        }
+        .navbar-inverse .navbar-nav > li > a {
+            color: #fff;
+        }
+        h2 {
+            color:#4E90A4;
+        }
+        
+    .central {
+        -webkit-border-radius: 1px 1px 1px 1px;
+        border-radius: 8px;
+        margin:10px;
+        padding:5px;
+        background-color:#4E90A4;
+-webkit-transition: all 500ms ease;
+-moz-transition: all 500ms ease;
+-ms-transition: all 500ms ease;
+-o-transition: all 500ms ease;
+transition: all 500ms ease;
+    }
+        .central:hover {
+-webkit-transition: all 500ms ease;
+-moz-transition: all 500ms ease;
+-ms-transition: all 500ms ease;
+-o-transition: all 500ms ease;
+transition: all 500ms ease;
+background-color:#73b2c5;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("DOMO DO", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li>@Html.ActionLink("Mis Centrales", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Todos mis Dispositivos", "TodosDispositivos", "Dispositivos",new { Id = 1 },null)</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Hola Jorge!</a></li>
+                </ul>
+            </div>
+
+                    
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p style="text-align:center;">&copy; @DateTime.Now.Year - Devkairos V 1.0.4</p>
+        </footer>
+    </div>
+    <script type="text/javascript">
+        var curl = "@Request.Url.Scheme" + "://" + "@Request.Url.Authority" + "@Request.ApplicationPath.TrimEnd('/')" + "/";
+
+    </script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DOMODO.Models.Persona_Central>
+@{
+    ViewBag.Title = "Todos Dispositivos";
+}
+
+<h2>Todos Dispositivos</h2>
+<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>@Html.ActionLink("Agregar Nuevo Dispositivo", "CrearDispositivo", "Dispositivos", new { Id = 1 },null)
+@foreach (var centralpersona in Model)
+{
+    int count = (centralpersona.Central.Dispositivo == null) ? 0 : centralpersona.Central.Dispositivo.Count;
+    <h2>@centralpersona.Central.Nombre</h2>
+    <hr />
+    if (count == 0)
+    {
+        <div class="alert alert-danger">
+            <strong>No hay dispositivos cargados en esta central</strong>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var disp in centralpersona.Central.Dispositivo)
+            {
+                int countsensor = (disp.Sensores == null) ? 0 : disp.Sensores.Count;
+                <div class="central col-md-3">
+                    <h2 class="white">@disp.Nombre</h2>
+                    <p class="white"> Actualmente hay @countsensor sensor(es) cargados a este dispositivo </p>
+                    @if (countsensor != 0) {
+                        foreach (var senso in disp.Sensores)
+                        {
+                            <p>Sensor: @senso.Nombre</p>
+                        }
+                    }
+                </div>
+            }
+
+        </div>
+
+    }
+
+}

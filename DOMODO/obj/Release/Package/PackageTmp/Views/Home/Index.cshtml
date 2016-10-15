@@ -1,0 +1,21 @@
+﻿@model IEnumerable<DOMODO.Models.Persona_Central>
+@{
+    ViewBag.Title = "Mis Dispositivos";
+}
+<h2>Mis Centrales</h2>
+<hr />
+<div class="row">
+    @foreach (var item in Model)
+    {
+        int count = (item.Central.Dispositivo == null) ? 0 : item.Central.Dispositivo.Count;
+        <div class="central col-md-3" >
+            <fieldset @((count == 0) ? "disabled" : "")>
+                <h2 class="white">@item.Central.Nombre</h2>
+                <p class="white"> Actualmente hay @count dispositivo(s) ingresados </p>
+                <p >
+                    @Html.ActionLink("Ver dispositivos >>", "DispositivosCentral", "Dispositivos", new { id = item.IdCentral }, new { @class = "btn btn-success" })
+                </p>
+            </fieldset>            
+        </div>
+    } 
+</div>

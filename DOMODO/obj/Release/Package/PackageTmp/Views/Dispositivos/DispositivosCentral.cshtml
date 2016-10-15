@@ -1,0 +1,235 @@
+﻿@model IEnumerable<DOMODO.Models.Dispositivo>
+@{
+    ViewBag.Title = "Dispositivos";
+}
+<style>
+    .sensorclick {
+        cursor:pointer;
+    }
+    .verdadero {
+    background-color:#2bf034;
+    }
+    .mediano
+    {
+        background-color:#f3b258;
+    }
+    .falso {
+        background-color:#f02b32;
+        
+    }
+    .spannomb {
+        
+    }
+    .clicksensorchange {
+        cursor:pointer;
+    }
+ </style>
+
+<h2>Dispositivos @Model.FirstOrDefault().Central.Nombre</h2>
+<div class="row">
+    @foreach (var disp in Model)
+    {
+        int countsensor = (disp.Sensores == null) ? 0 : disp.Sensores.Count;
+        <div class="central col-md-3">
+            <h2 class="white">@disp.Nombre</h2>
+            <p class="white"> Actualmente hay @countsensor sensor(es) cargados a este dispositivo </p>
+            <button type="button" data-id="@disp.IdDispositivo" class="btn btn-success addsensor">+ Sensor</button>
+            @if (countsensor != 0)
+            {
+                <hr />
+                <div id="div_sensores_@disp.IdDispositivo" style="text-align:center">
+                    
+
+                </div>
+                <div class="loadsensor_dispositivo" style="text-align:center">
+                    <img src="/img/ajax-loader.gif" />
+                </div>
+                <!--<div class="alert sensorclick" style="background-color:#f3b258;">
+                        <strong>Luz Pieza 1!</strong> Normal
+                    </div>
+                    <div class="alert sensorclick" style="background-color:#f02b32;">
+                        <strong>Luz Pieza 2!</strong> Apagada
+                    </div>
+                    <div class="alert sensorclick" style="background-color:#2bf034;">
+                        <strong>Luz Pieza 3!</strong> Encendida
+                    </div>-->
+            }            
+
+        </div>
+    }
+</div>
+<div id="modalsensor" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header white" style="background-color:#4E90A4">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Nuevo Sensor</h4>
+
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <form id="formulario" action="" method="post">
+                        <input id="txtiddispositivo" type="hidden" placeholder="Id dispositivo" name="iddispositivo" />
+
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Nombre sensor <small>(descriptivo)</small></label>
+                            <div class="col-md-5">
+                                <input id="nombresensor" name="nombresensor" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Identificador</label>
+                            <div class="col-md-5">
+                                <input id="identificador" name="identificador" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5">PIN</label>
+                            <div class="col-md-5">
+                                <input id="pin" type="number" name="pin" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-5">Tipo sensor</label>
+                            <div class="col-md-5">
+                                <select name="tiposensor" class="form-control">
+                                    <option value="digital">Digital</option>
+                                    <option value="analogico">Analógico</option>
+                                </select>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group" >
+                            <label class="control-label col-md-5">&nbsp;</label>
+                            <div class="col-md-5 pull-right" style="margin-top:10px;">
+                                <button id="btncreasensor" onclick="sendpost();" type="button" class="btn btn-info">Crear Sensor</button>
+                            </div>                            
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="modal-footer" style="background-color:#4E90A4">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            getestados();
+            setInterval(getestados, 5000);
+        });
+        $(document).on("click", ".clicksensorchange", function () {           
+            var value = $(this).data("value");
+            if (value > 1){
+                value=0;
+            }else{
+                value=255;
+            }
+            cambiarestado($(this).data("id"), value);
+        });
+        
+        $(document).on("click", ".addsensor", function () {
+            $("#txtiddispositivo").val("");
+            $("#nombresensor").val("");
+            $("#identificador").val("");
+            $("#pin").val("");
+            var id = $(this).data("id");
+            $("#txtiddispositivo").val(id);
+            $("#modalsensor").modal("show");
+        });
+        function cambiarestado(id,valortxt) {
+            $.ajax({
+                url: curl + "Apidomo/CambiarSensorDispositivo",
+                method: 'POST',
+                data: {
+                    idsensor: id,
+                    valor: valortxt
+                },
+                dataType: 'json',
+                beforeSend: function () {
+                    $(".clicksensorchange[data-id=" + id + "]").html("Cambiando...");
+                },
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+
+                }
+
+            });
+        }
+        function sendpost() {
+            $.ajax({
+                url: curl + "Sensores/CrearSensor",
+                method: 'POST',
+                data: $("#formulario").serialize(),
+                dataType: 'json',
+                beforeSend: function () {
+                    $("#btncreasensor").html("Cargando...");
+                },
+                success: function (result) {
+                    $("#btncreasensor").html("Crear Sensor");
+                    $("#modalsensor").modal("hide");
+
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                    $("#btncreasensor").html("Error");
+                }
+
+            });
+        }
+
+        function getestados() {
+            $.ajax({
+                url: curl + "/Apidomo/RevisaRespuestasPendientes",
+                method: 'POST',
+                data: { 'idcentral' : '@Model.FirstOrDefault().Central.IdCentral'},
+                dataType: 'json',
+                beforeSend: function () {
+                    //var htmltag = '<img src="/img/ajax-loader.gif" />';
+                    //$(".loadsensor_dispositivo").html(htmltag);
+                },
+                success: function (data) {
+                    $(".loadsensor_dispositivo").html("");
+                    $.each(data.Lista, function (index2, item2) {
+                        var taginsert = "";
+
+                        $.each(item2.Lista, function (index, item) {
+                            var colorclass = "";
+                            if (item.TypoSensor == "analogico") {
+
+                                if (item.Valor < 400) {
+                                    colorclass = "falso";
+                                } else if (item.Valor < 700) {
+                                    colorclass = "mediano";
+                                } else {
+                                    colorclass = "verdadero";
+                                }
+                            } else {
+                                if (item.Valor == 1) {
+                                    colorclass = "verdadero";
+                                } else {
+                                    colorclass = "falso";
+                                }
+                            }
+                            taginsert += '<div class="alert clicksensorchange ' + colorclass + '" data-value="' + item.Valor + '" data-id="' + item.IdSensor + '"><span class="white spannomb">' + item.NombreSensor + '</span></div>';
+
+                        });
+                        $("#div_sensores_" + item2.iddispositivo).html(taginsert);
+                    });
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+
+                }
+
+            });
+        }
+    </script>
+}

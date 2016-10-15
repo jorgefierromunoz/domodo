@@ -1,0 +1,42 @@
+﻿@model DOMODO.Models.Persona_Central
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Persona_Central</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Central.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Central.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persona.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persona.Nombre)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdPersonaCentral }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,28 @@
+﻿@model IEnumerable<DOMODO.Models.Dispositivo>
+@{
+    ViewBag.Title = "Dispositivos";
+}
+
+<h2>Dispositivos</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        var lastregistro = item.Registro.OrderByDescending(x => x.IdRegistro).First();
+       
+        <div class="col-md-4" style="">
+            <h2 class="white">@item.Nombre</h2>
+            <p class="white"> @item.Descripcion</p>
+            @if (lastregistro != null)
+            {
+                <p>Valor Analógico actual: @lastregistro.ValorAnalogicoActual</p>
+                <p>Valor Digital actual: @lastregistro.ValorDigitalActual</p>
+            }
+            else
+            {
+                <p>No hay lecturas de este dispositivo</p>
+            }
+        </div>
+    }
+
+</div>

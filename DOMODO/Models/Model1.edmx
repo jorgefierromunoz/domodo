@@ -1,0 +1,528 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="bd700doModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Central">
+          <Key>
+            <PropertyRef Name="IdCentral" />
+          </Key>
+          <Property Name="IdCentral" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="500" />
+          <Property Name="Version" Type="varchar" MaxLength="500" />
+          <Property Name="Identificador" Type="nvarchar" MaxLength="500" />
+          <Property Name="Color" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Dispositivo">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCentral" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="500" />
+          <Property Name="Identificador" Type="nvarchar" MaxLength="500" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="500" />
+          <Property Name="Apellido" Type="varchar" MaxLength="500" />
+          <Property Name="Edad" Type="int" />
+        </EntityType>
+        <EntityType Name="Persona_Central">
+          <Key>
+            <PropertyRef Name="IdPersonaCentral" />
+          </Key>
+          <Property Name="IdPersonaCentral" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPersona" Type="int" />
+          <Property Name="IdCentral" Type="int" />
+          <Property Name="Fecha" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Peticion">
+          <Key>
+            <PropertyRef Name="IdPeticion" />
+          </Key>
+          <Property Name="IdPeticion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdSensor" Type="int" />
+          <Property Name="Estado" Type="nvarchar" MaxLength="50" />
+          <Property Name="Valor" Type="nchar" MaxLength="50" />
+          <Property Name="Accion" Type="varchar" MaxLength="500" />
+          <Property Name="NuevoVal" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Registro">
+          <Key>
+            <PropertyRef Name="IdRegistro" />
+          </Key>
+          <Property Name="IdRegistro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdDispositivo" Type="int" />
+          <Property Name="Detalle" Type="varchar" MaxLength="500" />
+          <Property Name="Fecha" Type="datetime" />
+          <Property Name="ValorAnalogicoActual" Type="int" />
+          <Property Name="ValorDigitalActual" Type="bit" />
+          <Property Name="Pin" Type="varchar" MaxLength="50" />
+          <Property Name="IdSensor" Type="int" />
+          <Property Name="TypoSensor" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Sensores">
+          <Key>
+            <PropertyRef Name="IdSensores" />
+          </Key>
+          <Property Name="IdSensores" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdDispositivo" Type="int" />
+          <Property Name="Nombre" Type="varchar" MaxLength="500" />
+          <Property Name="Pin" Type="varchar" MaxLength="50" />
+          <Property Name="TipoSensor" Type="varchar" MaxLength="50" />
+          <Property Name="Identificador" Type="varchar" MaxLength="500" />
+          <Property Name="Estado" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Dispositivo_Central">
+          <End Role="Central" Type="Self.Central" Multiplicity="0..1" />
+          <End Role="Dispositivo" Type="Self.Dispositivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Central">
+              <PropertyRef Name="IdCentral" />
+            </Principal>
+            <Dependent Role="Dispositivo">
+              <PropertyRef Name="IdCentral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Central_Central">
+          <End Role="Central" Type="Self.Central" Multiplicity="0..1" />
+          <End Role="Persona_Central" Type="Self.Persona_Central" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Central">
+              <PropertyRef Name="IdCentral" />
+            </Principal>
+            <Dependent Role="Persona_Central">
+              <PropertyRef Name="IdCentral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Central_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Persona_Central" Type="Self.Persona_Central" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Persona_Central">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Peticion_Sensores">
+          <End Role="Sensores" Type="Self.Sensores" Multiplicity="0..1" />
+          <End Role="Peticion" Type="Self.Peticion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sensores">
+              <PropertyRef Name="IdSensores" />
+            </Principal>
+            <Dependent Role="Peticion">
+              <PropertyRef Name="IdSensor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Dispositivo">
+          <End Role="Dispositivo" Type="Self.Dispositivo" Multiplicity="0..1" />
+          <End Role="Registro" Type="Self.Registro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="Registro">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sensores_Dispositivo">
+          <End Role="Dispositivo" Type="Self.Dispositivo" Multiplicity="0..1" />
+          <End Role="Sensores" Type="Self.Sensores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="Sensores">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bd700doModelStoreContainer">
+          <EntitySet Name="Central" EntityType="Self.Central" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dispositivo" EntityType="Self.Dispositivo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona_Central" EntityType="Self.Persona_Central" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Peticion" EntityType="Self.Peticion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registro" EntityType="Self.Registro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sensores" EntityType="Self.Sensores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Dispositivo_Central" Association="Self.FK_Dispositivo_Central">
+            <End Role="Central" EntitySet="Central" />
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Central_Central" Association="Self.FK_Persona_Central_Central">
+            <End Role="Central" EntitySet="Central" />
+            <End Role="Persona_Central" EntitySet="Persona_Central" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Central_Persona" Association="Self.FK_Persona_Central_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Persona_Central" EntitySet="Persona_Central" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Peticion_Sensores" Association="Self.FK_Peticion_Sensores">
+            <End Role="Sensores" EntitySet="Sensores" />
+            <End Role="Peticion" EntitySet="Peticion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Dispositivo" Association="Self.FK_Registro_Dispositivo">
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+            <End Role="Registro" EntitySet="Registro" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sensores_Dispositivo" Association="Self.FK_Sensores_Dispositivo">
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+            <End Role="Sensores" EntitySet="Sensores" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="bd700doModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Central">
+          <Key>
+            <PropertyRef Name="IdCentral" />
+          </Key>
+          <Property Name="IdCentral" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Version" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Persona_Central" Relationship="Self.FK_Persona_Central_Central" FromRole="Central" ToRole="Persona_Central" />
+          <Property Name="Identificador" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Dispositivo" Relationship="bd700doModel.FK_Dispositivo_Central" FromRole="Central" ToRole="Dispositivo" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Edad" Type="Int32" />
+          <NavigationProperty Name="Persona_Central" Relationship="Self.FK_Persona_Central_Persona" FromRole="Persona" ToRole="Persona_Central" />
+        </EntityType>
+        <EntityType Name="Persona_Central">
+          <Key>
+            <PropertyRef Name="IdPersonaCentral" />
+          </Key>
+          <Property Name="IdPersonaCentral" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPersona" Type="Int32" />
+          <Property Name="IdCentral" Type="Int32" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Central" Relationship="Self.FK_Persona_Central_Central" FromRole="Persona_Central" ToRole="Central" />
+          <NavigationProperty Name="Persona" Relationship="Self.FK_Persona_Central_Persona" FromRole="Persona_Central" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Persona_Central_Central">
+          <End Role="Central" Type="Self.Central" Multiplicity="0..1" />
+          <End Role="Persona_Central" Type="Self.Persona_Central" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Central">
+              <PropertyRef Name="IdCentral" />
+            </Principal>
+            <Dependent Role="Persona_Central">
+              <PropertyRef Name="IdCentral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Central_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Persona_Central" Type="Self.Persona_Central" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Persona_Central">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bd700doEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Central" EntityType="Self.Central" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" />
+          <EntitySet Name="Persona_Central" EntityType="Self.Persona_Central" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_Persona_Central_Central" Association="Self.FK_Persona_Central_Central">
+            <End Role="Central" EntitySet="Central" />
+            <End Role="Persona_Central" EntitySet="Persona_Central" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Central_Persona" Association="Self.FK_Persona_Central_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Persona_Central" EntitySet="Persona_Central" />
+          </AssociationSet>
+          <EntitySet Name="Sensores" EntityType="bd700doModel.Sensores" />
+          <EntitySet Name="Dispositivo" EntityType="bd700doModel.Dispositivo" />
+          <AssociationSet Name="FK_Dispositivo_Central" Association="bd700doModel.FK_Dispositivo_Central">
+            <End Role="Central" EntitySet="Central" />
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sensores_Dispositivo" Association="bd700doModel.FK_Sensores_Dispositivo">
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+            <End Role="Sensores" EntitySet="Sensores" />
+          </AssociationSet>
+          <EntitySet Name="Registro" EntityType="bd700doModel.Registro" />
+          <AssociationSet Name="FK_Registro_Dispositivo" Association="bd700doModel.FK_Registro_Dispositivo">
+            <End Role="Dispositivo" EntitySet="Dispositivo" />
+            <End Role="Registro" EntitySet="Registro" />
+          </AssociationSet>
+          <EntitySet Name="Peticion" EntityType="bd700doModel.Peticion" />
+          <AssociationSet Name="FK_Peticion_Sensores" Association="bd700doModel.FK_Peticion_Sensores">
+            <End Role="Sensores" EntitySet="Sensores" />
+            <End Role="Peticion" EntitySet="Peticion" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Sensores">
+          <Key>
+            <PropertyRef Name="IdSensores" />
+          </Key>
+          <Property Name="IdSensores" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdDispositivo" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TipoSensor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Identificador" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="Int32" />
+          <NavigationProperty Name="Dispositivo" Relationship="bd700doModel.FK_Sensores_Dispositivo" FromRole="Sensores" ToRole="Dispositivo" />
+          <NavigationProperty Name="Peticion" Relationship="bd700doModel.FK_Peticion_Sensores" FromRole="Sensores" ToRole="Peticion" />
+        </EntityType>
+        <EntityType Name="Dispositivo">
+          <Key>
+            <PropertyRef Name="IdDispositivo" />
+          </Key>
+          <Property Name="IdDispositivo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCentral" Type="Int32" />
+          <Property Name="Nombre" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Identificador" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Central" Relationship="bd700doModel.FK_Dispositivo_Central" FromRole="Dispositivo" ToRole="Central" />
+          <NavigationProperty Name="Sensores" Relationship="bd700doModel.FK_Sensores_Dispositivo" FromRole="Dispositivo" ToRole="Sensores" />
+          <NavigationProperty Name="Registro" Relationship="bd700doModel.FK_Registro_Dispositivo" FromRole="Dispositivo" ToRole="Registro" />
+        </EntityType>
+        <Association Name="FK_Dispositivo_Central">
+          <End Type="bd700doModel.Central" Role="Central" Multiplicity="0..1" />
+          <End Type="bd700doModel.Dispositivo" Role="Dispositivo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Central">
+              <PropertyRef Name="IdCentral" />
+            </Principal>
+            <Dependent Role="Dispositivo">
+              <PropertyRef Name="IdCentral" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sensores_Dispositivo">
+          <End Type="bd700doModel.Dispositivo" Role="Dispositivo" Multiplicity="0..1" />
+          <End Type="bd700doModel.Sensores" Role="Sensores" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="Sensores">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Registro">
+          <Key>
+            <PropertyRef Name="IdRegistro" />
+          </Key>
+          <Property Name="IdRegistro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdDispositivo" Type="Int32" />
+          <Property Name="Detalle" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha" Type="DateTime" Precision="3" />
+          <Property Name="ValorAnalogicoActual" Type="Int32" />
+          <Property Name="ValorDigitalActual" Type="Boolean" />
+          <Property Name="Pin" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IdSensor" Type="Int32" />
+          <Property Name="TypoSensor" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Dispositivo" Relationship="bd700doModel.FK_Registro_Dispositivo" FromRole="Registro" ToRole="Dispositivo" />
+        </EntityType>
+        <Association Name="FK_Registro_Dispositivo">
+          <End Type="bd700doModel.Dispositivo" Role="Dispositivo" Multiplicity="0..1" />
+          <End Type="bd700doModel.Registro" Role="Registro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dispositivo">
+              <PropertyRef Name="IdDispositivo" />
+            </Principal>
+            <Dependent Role="Registro">
+              <PropertyRef Name="IdDispositivo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Peticion">
+          <Key>
+            <PropertyRef Name="IdPeticion" />
+          </Key>
+          <Property Name="IdPeticion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdSensor" Type="Int32" />
+          <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Valor" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Accion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="NuevoVal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Sensores" Relationship="bd700doModel.FK_Peticion_Sensores" FromRole="Peticion" ToRole="Sensores" />
+        </EntityType>
+        <Association Name="FK_Peticion_Sensores">
+          <End Type="bd700doModel.Sensores" Role="Sensores" Multiplicity="0..1" />
+          <End Type="bd700doModel.Peticion" Role="Peticion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sensores">
+              <PropertyRef Name="IdSensores" />
+            </Principal>
+            <Dependent Role="Peticion">
+              <PropertyRef Name="IdSensor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bd700doModelStoreContainer" CdmEntityContainer="bd700doEntities">
+          <EntitySetMapping Name="Central">
+            <EntityTypeMapping TypeName="bd700doModel.Central">
+              <MappingFragment StoreEntitySet="Central">
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="IdCentral" ColumnName="IdCentral" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona">
+            <EntityTypeMapping TypeName="bd700doModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona_Central">
+            <EntityTypeMapping TypeName="bd700doModel.Persona_Central">
+              <MappingFragment StoreEntitySet="Persona_Central">
+                <ScalarProperty Name="IdPersonaCentral" ColumnName="IdPersonaCentral" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="IdCentral" ColumnName="IdCentral" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="bd700doModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sensores">
+            <EntityTypeMapping TypeName="bd700doModel.Sensores">
+              <MappingFragment StoreEntitySet="Sensores">
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="TipoSensor" ColumnName="TipoSensor" />
+                <ScalarProperty Name="Pin" ColumnName="Pin" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
+                <ScalarProperty Name="IdSensores" ColumnName="IdSensores" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dispositivo">
+            <EntityTypeMapping TypeName="bd700doModel.Dispositivo">
+              <MappingFragment StoreEntitySet="Dispositivo">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Identificador" ColumnName="Identificador" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdCentral" ColumnName="IdCentral" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registro">
+            <EntityTypeMapping TypeName="bd700doModel.Registro">
+              <MappingFragment StoreEntitySet="Registro">
+                <ScalarProperty Name="TypoSensor" ColumnName="TypoSensor" />
+                <ScalarProperty Name="IdSensor" ColumnName="IdSensor" />
+                <ScalarProperty Name="Pin" ColumnName="Pin" />
+                <ScalarProperty Name="ValorDigitalActual" ColumnName="ValorDigitalActual" />
+                <ScalarProperty Name="ValorAnalogicoActual" ColumnName="ValorAnalogicoActual" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Detalle" ColumnName="Detalle" />
+                <ScalarProperty Name="IdDispositivo" ColumnName="IdDispositivo" />
+                <ScalarProperty Name="IdRegistro" ColumnName="IdRegistro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Peticion">
+            <EntityTypeMapping TypeName="bd700doModel.Peticion">
+              <MappingFragment StoreEntitySet="Peticion">
+                <ScalarProperty Name="NuevoVal" ColumnName="NuevoVal" />
+                <ScalarProperty Name="Accion" ColumnName="Accion" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdSensor" ColumnName="IdSensor" />
+                <ScalarProperty Name="IdPeticion" ColumnName="IdPeticion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<DOMODO.Models.Registro>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Detalle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ValorAnalogicoActual)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ValorDigitalActual)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sensor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dispositivo.Nombre)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Detalle)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fecha)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ValorAnalogicoActual)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ValorDigitalActual)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Sensor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Pin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dispositivo.Nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.IdRegistro }) |
+            @Html.ActionLink("Details", "Details", new { id=item.IdRegistro }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.IdRegistro })
+        </td>
+    </tr>
+}
+
+</table>

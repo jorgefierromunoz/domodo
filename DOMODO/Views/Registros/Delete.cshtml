@@ -1,0 +1,80 @@
+﻿@model DOMODO.Models.Registro
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Registro</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Detalle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Detalle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorAnalogicoActual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorAnalogicoActual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorDigitalActual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorDigitalActual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sensor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sensor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Dispositivo.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Dispositivo.Nombre)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
